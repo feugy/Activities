@@ -1,0 +1,50 @@
+{
+  "name": "sport-mode",
+  "version": "1.0.0",
+  "description": "sport mode for Bangle.js smartwatch",
+  "main": "src/index.js",
+  "scripts": {
+    "build": "rollup --config",
+    "build:watch": "rollup --config --watch",
+    "emulate": "bangle-scripts start -e -s ./dist/bundle.js",
+    "lint": "eslint",
+    "prettier": "prettier --write '**/*.js?(on)'",
+    "start": "bangle-scripts start -s dist/bundle",
+    "test": "jest",
+    "upload": "bangle-scripts upload"
+  },
+  "keywords": [
+    "bangle.js",
+    "sport"
+  ],
+  "author": "feugy <damien.feugas@gmail.com>",
+  "license": "MIT",
+  "devDependencies": {
+    "@babel/plugin-proposal-object-rest-spread": "^7.7.4",
+    "@babel/plugin-transform-block-scoped-functions": "^7.7.4",
+    "@babel/plugin-transform-block-scoping": "^7.7.4",
+    "@babel/plugin-transform-destructuring": "^7.7.4",
+    "@babel/plugin-transform-parameters": "^7.7.4",
+    "@babel/plugin-transform-shorthand-properties": "^7.7.4",
+    "@babel/plugin-transform-spread": "^7.7.4",
+    "babel-preset-es2015-rollup": "^3.0.0",
+    "bangle-scripts": "^0.0.5",
+    "eslint": "^6.6.0",
+    "eslint-config-prettier": "^6.7.0",
+    "eslint-config-prettier-standard": "^3.0.1",
+    "eslint-config-standard": "^14.1.0",
+    "eslint-plugin-import": "^2.18.2",
+    "eslint-plugin-node": "^10.0.0",
+    "eslint-plugin-prettier": "^3.1.1",
+    "eslint-plugin-promise": "^4.2.1",
+    "eslint-plugin-standard": "^4.0.1",
+    "faker": "^4.1.0",
+    "jest": "^24.9.0",
+    "prettier": "^1.19.1",
+    "prettier-config-standard": "^1.0.1",
+    "rollup": "^1.27.5",
+    "rollup-plugin-babel": "^4.3.3",
+    "rollup-plugin-commonjs": "^10.1.0",
+    "rollup-plugin-node-resolve": "^5.2.0"
+  }
+}
