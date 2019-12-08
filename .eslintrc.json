@@ -6,6 +6,8 @@
     "prettier-standard"
   ],
   "globals": {
+    "Bangle": true,
+    "E": true,
     "g": true,
     "BTN1": true,
     "BTN2": true,

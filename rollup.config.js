@@ -1,6 +1,7 @@
 const babel = require('rollup-plugin-babel')
 const commonjs = require('rollup-plugin-commonjs')
 const resolve = require('rollup-plugin-node-resolve')
+const { terser } = require('rollup-plugin-terser')
 
 module.exports = {
   input: 'src/index.js',
@@ -11,7 +12,8 @@ module.exports = {
     }),
     babel({
       exclude: 'node_modules/**'
-    })
+    }),
+    terser()
   ],
   output: {
     file: 'dist/bundle.js',

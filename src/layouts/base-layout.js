@@ -1,3 +1,5 @@
+const { buttonsService } = require('../services')
+
 /**
  * Base class for all layouts.
  * - holds a set of metrics,
@@ -19,10 +21,12 @@ module.exports = class BaseLayout {
       metrics: [],
       locale,
       slotNb,
-      height: 240,
-      width: 240
+      height: g.getHeight(),
+      width: g.getWidth()
     })
     this.onChangedMetric = this.onChangedMetric.bind(this)
+    this.onPressedButton = this.onPressedButton.bind(this)
+    buttonsService.on('press', this.onPressedButton)
   }
 
   /**
@@ -62,12 +66,32 @@ module.exports = class BaseLayout {
         g.drawString(value, 30, 30 * (i + 1))
       }
     }
+    g.flip()
+  }
+
+  /**
+   * Invoked when a button is pressed
+   * Fires events:
+   * - pause on BTN1 (dispose)
+   * - next on BTN2
+   * @param {object} evt - pressed button event
+   * @param {number} evt.button - pressed button
+   */
+  onPressedButton({ button }) {
+    if (button === BTN1) {
+      this.emit('pause', this)
+      this.dispose()
+    } else if (button === BTN2) {
+      this.emit('next', this)
+    }
   }
 
   /**
    * Removes change listeners on contained metrics
    */
   dispose() {
+    this.removeAllListeners()
+    buttonsService.removeListener('press', this.onPressedButton)
     for (const metric of this.metrics) {
       if (metric) {
         metric.removeListener('change', this.onChangedMetric)

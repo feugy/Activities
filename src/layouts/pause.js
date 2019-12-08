@@ -1,7 +1,6 @@
 const BaseLayout = require('./base-layout')
 const { CurrentTimeMetric, DurationMetric } = require('../metrics')
-const { green, red } = require('../utils')
-const { buttonsService } = require('../services')
+const { drawCenteredString, green, red } = require('../utils')
 
 /**
  * Layout displayed on activity pause:
@@ -14,26 +13,28 @@ module.exports = class PauseLayout extends BaseLayout {
     this.currentSlot = 0
     this.assignMetric(new DurationMetric())
     this.assignMetric(new CurrentTimeMetric(), 1)
-
-    this.onToggleDisplayedMetric = this.onToggleDisplayedMetric.bind(this)
-    buttonsService.on('press', this.onToggleDisplayedMetric)
-
-    g.clear()
-  }
-
-  dispose() {
-    buttonsService.removeListener('press', this.onToggleDisplayedMetric)
-    super.dispose()
+    this.onChangedMetric()
   }
 
   /**
-   * When central button is pressed, circulate through available metrics
-   * @param {number} button - pressed button
+   * Invoked when a button is pressed
+   * Fires event:
+   * - stop on BTN1 (dispose)
+   * - resume on BTN3 (dispose)
+   * On BTN2, switch displayed metric
+   * @param {object} evt - pressed button event
+   * @param {number} evt.button - pressed button
    */
-  onToggleDisplayedMetric({ button }) {
-    if (button === BTN2) {
+  onPressedButton({ button }) {
+    if (button === BTN1) {
+      this.emit('stop', this)
+      this.dispose()
+    } else if (button === BTN2) {
       this.currentSlot = (this.currentSlot + 1) % this.slotNb
       this.onChangedMetric()
+    } else if (button === BTN3) {
+      this.emit('resume', this)
+      this.dispose()
     }
   }
 
@@ -42,13 +43,31 @@ module.exports = class PauseLayout extends BaseLayout {
    */
   onChangedMetric() {
     const { width, height, locale } = this
-    const fontSize = height * 0.05
-    g.setFontVector(fontSize)
-    g.clearRect(0, height * 0.5 - fontSize, width, height * 0.5 + fontSize)
+    const fontSize = height * 0.15
     const value = this.metrics[this.currentSlot].getDisplayValue({
       locale /*, TODO unit */
     })
-    const textW = g.stringWidth(value)
-    g.drawString(value, (width - textW) * 0.5, (height - fontSize * 1.1) * 0.5)
+    g.clear()
+    // draw message and metric
+    drawCenteredString('paused...', this, height * 0.1, height * 0.25)
+    drawCenteredString(value, this, fontSize)
+    // draw icons
+    const color = g.getColor()
+    g.setColor(...red)
+    g.drawRect(width * 0.9, 0, width * 0.95, height * 0.075)
+    g.setColor(...green)
+    g.drawPoly(
+      [
+        width * 0.9,
+        height * 0.915,
+        width * 0.95,
+        height * 0.9525,
+        width * 0.9,
+        height * 0.99
+      ],
+      true
+    )
+    g.setColor(color)
+    g.flip()
   }
 }

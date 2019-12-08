@@ -7,15 +7,15 @@ const { padWith0 } = require('../utils')
  * Stores duration in millis
  */
 module.exports = class DurationMetric extends BaseMetric {
-  constructor() {
+  constructor({ start } = {}) {
     super({ name: 'ellapsed-time' })
-    let start = null
+    this.start = start
     dateTimeService.on('update', () => {
       const now = dateTimeService.value
-      if (!start) {
-        start = now
+      if (!this.start) {
+        this.start = now
       }
-      this.setValue(now.getTime() - start.getTime())
+      this.setValue(now - this.start)
     })
   }
 

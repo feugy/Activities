@@ -9,13 +9,19 @@ class ButtonsService extends BaseService {
   }
 
   /**
-   * TODOC
+   * Starts monitoring button press (rising edge) for physical buttons
    * @returns {ButtonsService} for chaining purposes
-   * @fires Buttons#press on button pushes
+   * @fires ButtonsService#press on button pushes
    */
   start() {
     this.watches = [BTN1, BTN2, BTN3].map(button =>
-      setWatch(() => this.emit('press', { button }), button, { repeat: true })
+      setWatch(
+        () => {
+          this.emit('press', { button })
+        },
+        button,
+        { repeat: true, edge: 'rising' }
+      )
     )
     return this
   }

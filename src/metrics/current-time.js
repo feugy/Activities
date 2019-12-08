@@ -8,7 +8,9 @@ const { padWith0 } = require('../utils')
 module.exports = class CurrentTimeMetric extends BaseMetric {
   constructor() {
     super({ name: 'time' })
-    dateTimeService.on('update', () => this.setValue(dateTimeService.value))
+    dateTimeService.on('update', () =>
+      this.setValue(new Date(dateTimeService.value))
+    )
   }
 
   /**

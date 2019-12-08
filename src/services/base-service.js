@@ -27,7 +27,9 @@ module.exports = class BaseService {
   /**
    * Used to stop the service, and dispose any watchers
    */
-  dispose() {}
+  dispose() {
+    throw new Error(`Service ${this.name} does not support dispose`)
+  }
 }
 
 /**

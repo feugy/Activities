@@ -1,1 +1,6 @@
-Object.assign(module.exports, require('./colors'), require('./numbers'))
+Object.assign(
+  module.exports,
+  require('./colors'),
+  require('./graphics'),
+  require('./numbers')
+)

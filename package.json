@@ -9,7 +9,7 @@
     "emulate": "bangle-scripts start -e -s ./dist/bundle.js",
     "lint": "eslint",
     "prettier": "prettier --write '**/*.js?(on)'",
-    "start": "bangle-scripts start -s dist/bundle",
+    "start": "bangle-scripts start -s dist/bundle.js",
     "test": "jest",
     "upload": "bangle-scripts upload"
   },
@@ -28,7 +28,7 @@
     "@babel/plugin-transform-shorthand-properties": "^7.7.4",
     "@babel/plugin-transform-spread": "^7.7.4",
     "babel-preset-es2015-rollup": "^3.0.0",
-    "bangle-scripts": "^0.0.5",
+    "bangle-scripts": "^0.0.7",
     "eslint": "^6.6.0",
     "eslint-config-prettier": "^6.7.0",
     "eslint-config-prettier-standard": "^3.0.1",
@@ -45,6 +45,12 @@
     "rollup": "^1.27.5",
     "rollup-plugin-babel": "^4.3.3",
     "rollup-plugin-commonjs": "^10.1.0",
-    "rollup-plugin-node-resolve": "^5.2.0"
+    "rollup-plugin-node-resolve": "^5.2.0",
+    "rollup-plugin-terser": "^5.1.2",
+    "rollup-plugin-uglify": "^6.0.3"
+  },
+  "dependencies": {
+    "noble": "^1.9.1",
+    "remove": "^0.1.5"
   }
 }

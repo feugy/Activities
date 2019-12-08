@@ -1,5 +1,7 @@
 module.exports = {
   BaseService: require('./base-service'),
   buttonsService: require('./buttons'),
-  dateTimeService: require('./date-time')
+  heartRateService: require('./heart-rate'),
+  dateTimeService: require('./date-time'),
+  timeTrackerService: require('./time-tracker')
 }
