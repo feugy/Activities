@@ -6,13 +6,14 @@
  */
 module.exports = class BaseMetric {
   /**
-   * Meant for subclasses: allows to set name and initial value
+   * Meant for subclasses: allows to set name, initial value and icon
    * @param {object} args - metric arguments, including:
    * @param {string} args.name - metric's name
    * @param {any} [args.value = null] - initial value set
+   * @param {any} [args.icon = null] - icon
    */
-  constructor({ name, value = null }) {
-    Object.assign(this, { name, value })
+  constructor({ name, value = null, icon = null }) {
+    Object.assign(this, { name, value, icon })
   }
 
   /**
@@ -40,6 +41,15 @@ module.exports = class BaseMetric {
       : this.value != null
       ? this.value.toString()
       : '--'
+  }
+
+  /**
+   * Used to dispose metric's event listeners
+   * @returns {BaseMetric} for chaining purposes
+   */
+  dispose() {
+    this.removeAllListeners()
+    return this
   }
 }
 

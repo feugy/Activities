@@ -1,15 +1,24 @@
 const BaseLayout = require('./base-layout')
 const { drawCenteredString } = require('../utils')
 
-const drawMetric = (metric, offset, fontSize, layout) => {
+const drawMetric = (metric, offset, fontSize, layout, padding = 10) => {
+  if (!metric) {
+    return
+  }
   const { locale } = layout
-  const value = metric
-    ? metric.getDisplayValue({
-        locale /*, TODO unit */
-      })
-    : '--'
-  drawCenteredString(value, layout, fontSize, offset)
-  // TODO draw name/icon, draw unit
+  const value = metric.getDisplayValue({
+    locale /*, TODO unit */
+  })
+  const { x, y, height: textH } = drawCenteredString(
+    value,
+    layout,
+    fontSize,
+    offset
+  )
+  if (metric.icon) {
+    const { height: iconH, width: iconW } = metric.icon
+    g.drawImage(metric.icon, x - iconW - padding, y + (textH - iconH) / 2)
+  }
 }
 
 /**

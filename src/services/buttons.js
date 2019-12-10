@@ -32,7 +32,7 @@ class ButtonsService extends BaseService {
    */
   dispose() {
     this.watches.forEach(clearWatch)
-    return this
+    return super.dispose()
   }
 }
 

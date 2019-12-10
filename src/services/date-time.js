@@ -28,8 +28,8 @@ class DateTimeService extends BaseService {
    * @returns {DateTimeService} for chaining purposes
    */
   dispose() {
-    clearInterval(this.tintervalimeout)
-    return this
+    clearInterval(this.interval)
+    return super.dispose()
   }
 }
 

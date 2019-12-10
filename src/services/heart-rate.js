@@ -6,18 +6,6 @@ const BaseService = require('./base-service')
 class HeartRateService extends BaseService {
   constructor() {
     super({ name: 'heart-rate' })
-    this.onHeartBeat = this.onHeartRate.bind(this)
-    // Bangle.on('HRM', this.onHeartRate)
-  }
-
-  /**
-   * Updates current value on new heart rate received
-   * @param {object} event - event details
-   * @param {number} event.bpm - beats per minute
-   * @param {number} event.confidence - percentage from 0 to 100
-   */
-  onHeartRate({ bpm, confidence }) {
-    this.value = `${bpm} ${confidence}`
   }
 
   /**
@@ -26,7 +14,14 @@ class HeartRateService extends BaseService {
    * @fires HeartRateService#update every second or so
    */
   start() {
-    // Bangle.setGPSPower(1)
+    this.onHeartBeat = ({ bpm, confidence }) => {
+      if (confidence >= 33) {
+        this.value = bpm
+        this.emit('update', this)
+      }
+    }
+    Bangle.on('HRM', this.onHeartBeat)
+    Bangle.setHRMPower(true)
     return this
   }
 
@@ -35,9 +30,9 @@ class HeartRateService extends BaseService {
    * @returns {HeartRateService} for chaining purposes
    */
   dispose() {
-    // Bangle.removeListener('HRM', this.onHeartRate)
-    // Bangle.setGPSPower(0)
-    return this
+    Bangle.removeListener('HRM', this.onHeartBeat)
+    Bangle.setHRMPower(false)
+    return super.dispose()
   }
 }
 

@@ -86,7 +86,7 @@ class TimeTrackerService extends BaseService {
    */
   dispose() {
     this.value.push({ ts: Date.now(), type: stopped })
-    return this
+    return super.dispose()
   }
 }
 

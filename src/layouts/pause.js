@@ -13,7 +13,6 @@ module.exports = class PauseLayout extends BaseLayout {
     this.currentSlot = 0
     this.assignMetric(new DurationMetric())
     this.assignMetric(new CurrentTimeMetric(), 1)
-    this.onChangedMetric()
   }
 
   /**
@@ -26,13 +25,13 @@ module.exports = class PauseLayout extends BaseLayout {
    * @param {number} evt.button - pressed button
    */
   onPressedButton({ button }) {
-    if (button === BTN1) {
+    if (button === BTN3) {
       this.emit('stop', this)
       this.dispose()
     } else if (button === BTN2) {
       this.currentSlot = (this.currentSlot + 1) % this.slotNb
       this.onChangedMetric()
-    } else if (button === BTN3) {
+    } else if (button === BTN1) {
       this.emit('resume', this)
       this.dispose()
     }
@@ -54,16 +53,16 @@ module.exports = class PauseLayout extends BaseLayout {
     // draw icons
     const color = g.getColor()
     g.setColor(...red)
-    g.drawRect(width * 0.9, 0, width * 0.95, height * 0.075)
+    g.drawRect(width * 0.9, height * 0.915, width * 0.95, height * 0.99)
     g.setColor(...green)
     g.drawPoly(
       [
         width * 0.9,
-        height * 0.915,
+        0,
         width * 0.95,
-        height * 0.9525,
+        height * 0.0375,
         width * 0.9,
-        height * 0.99
+        height * 0.075
       ],
       true
     )

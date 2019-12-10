@@ -42,7 +42,7 @@ module.exports = class BaseLayout {
     }
     if (this.metrics[slotIdx]) {
       // unregister from previous value
-      this.metrics[slotIdx].removeListener('change', this.onChangedMetric)
+      this.metrics[slotIdx].dispose()
     }
     // register to the new metric, and redraw
     this.metrics[slotIdx] = metric
@@ -90,12 +90,13 @@ module.exports = class BaseLayout {
    * Removes change listeners on contained metrics
    */
   dispose() {
-    this.removeAllListeners()
-    buttonsService.removeListener('press', this.onPressedButton)
     for (const metric of this.metrics) {
       if (metric) {
-        metric.removeListener('change', this.onChangedMetric)
+        metric.dispose()
       }
     }
+    this.removeAllListeners()
+    buttonsService.removeListener('press', this.onPressedButton)
+    return this
   }
 }

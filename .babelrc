@@ -5,6 +5,7 @@
     "@babel/plugin-transform-parameters",
     "@babel/plugin-transform-shorthand-properties",
     "@babel/plugin-transform-destructuring",
+    ["@babel/plugin-transform-template-literals", { "loose": true }], // String.concat is not supported
     ["@babel/plugin-proposal-object-rest-spread", { "useBuiltIns": true }], // Object.assign is supported by Espruino.
     ["@babel/plugin-transform-block-scoping", { "throwIfClosureRequired": true }]
   ]

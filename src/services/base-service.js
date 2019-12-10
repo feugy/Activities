@@ -19,6 +19,8 @@ module.exports = class BaseService {
   /**
    * Used to start the service.
    * From this point, service may issue update event when needed
+   * @returns {BaseService} for chaining purposes
+   * @throws {Error} as this base service do not implement start method
    */
   start() {
     throw new Error(`Service ${this.name} does not support start`)
@@ -26,9 +28,11 @@ module.exports = class BaseService {
 
   /**
    * Used to stop the service, and dispose any watchers
+   * @returns {BaseService} for chaining purposes
    */
   dispose() {
-    throw new Error(`Service ${this.name} does not support dispose`)
+    this.removeAllListeners()
+    return this
   }
 }
 

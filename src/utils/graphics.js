@@ -5,6 +5,7 @@
  * @param {Layout} layout - current layout used, defining display width and height
  * @param {number} fontSize - size of the vector font used
  * @param {number} [verticalOffset = null] - y coordinate of the point used for vertical centering, default to half the layout height.
+ * @returns {object} draw text metrics: { x, y, width, height }
  */
 exports.drawCenteredString = (
   text,
@@ -19,4 +20,5 @@ exports.drawCenteredString = (
   const x = (width - textW) * 0.5
   const y = offset - fontSize * 0.55
   g.drawString(text, x, y)
+  return { x, y, width: textW, height: fontSize }
 }

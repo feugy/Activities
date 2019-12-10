@@ -10,7 +10,6 @@ module.exports = class StartLayout extends BaseLayout {
   constructor() {
     super({ slotNb: 1, name: 'start' })
     this.assignMetric(new CurrentTimeMetric())
-    this.onChangedMetric()
   }
 
   /**
