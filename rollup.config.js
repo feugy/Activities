@@ -1,47 +1,70 @@
 const babel = require('rollup-plugin-babel')
-const commonjs = require('rollup-plugin-commonjs')
 const resolve = require('rollup-plugin-node-resolve')
 const { terser } = require('rollup-plugin-terser')
+const tc = require('turbocolor')
 const info = require('./package.json')
 
+const buildTerserOption = (minify = true) => ({
+  ecma: 6,
+  // https://github.com/terser/terser#compress-options
+  compress: {
+    defaults: !minify,
+    ecma: 5
+  },
+  // https://github.com/terser/terser#output-options
+  output: {
+    beautify: !minify,
+    quote_style: 0,
+    ecma: 5
+  },
+  // https://github.com/terser/terser#mangle-properties-options
+  mangle: minify && {
+    toplevel: true,
+    module: true
+  }
+})
+
+const saveAsApp = (enabled = true) => ({
+  name: 'espruino-app',
+  renderChunk(code) {
+    console.error(
+      tc.yellow(`minified code is ${tc.bold(code.length)} characters long`)
+    )
+    if (!enabled) {
+      return code
+    }
+    const size = 2000
+    const name = info.name.slice(0, 7)
+    const chunks = []
+    for (let i = 0; i < code.length; i += size) {
+      chunks.push(code.slice(i, i + size))
+    }
+    console.error(tc.yellow(`written in ${tc.bold(chunks.length)} chunks`))
+    return `const storage = require("Storage")
+const appSrc = "-${name}";
+storage.erase(appSrc);
+${chunks
+  .map(
+    (chunk, i) =>
+      `storage.write(appSrc, \`${chunk}\`, ${i * size}, ${code.length});`
+  )
+  .join('\n')}
+const appDesc = "+${name}";
+storage.erase(appDesc);
+storage.write(appDesc, { "name": "${info.name}", "src": appSrc });`
+  }
+})
+
 module.exports = {
-  input: 'src/index.js',
+  input: 'src/activity.js',
   external: ['heatshrink'],
   plugins: [
     resolve(),
-    commonjs({
-      include: ['src/**', 'node_modules/**']
-    }),
     babel({
       exclude: 'node_modules/**'
     }),
-    terser({
-      ecma: 6,
-      // https://github.com/terser/terser#compress-options
-      compress: {
-        defaults: false,
-        ecma: 5
-      },
-      // https://github.com/terser/terser#output-options
-      output: {
-        beautify: true,
-        quote_style: 0,
-        ecma: 5
-      },
-      // mangling names creates LOW_MEMORY issues on upload
-      // https://github.com/terser/terser#mangle-properties-options
-      mangle: false
-    }),
-    {
-      name: 'espruino-app',
-      renderChunk(code) {
-        const name = info.name.slice(0, 7)
-        return `const storage = require("Storage")
-const appName = "-${name}";
-storage.write(appName, \`${code}\`);
-storage.write("+${name}",{ "name": "${info.name}", "src": appName);`
-      }
-    }
+    terser(buildTerserOption(!process.argv.includes('--no-minify'))),
+    saveAsApp(process.argv.includes('--app'))
   ],
   output: {
     file: 'dist/bundle.js',

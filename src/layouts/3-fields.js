@@ -1,48 +1,59 @@
-const BaseLayout = require('./base-layout')
-const { drawCenteredString } = require('../utils')
-
-const drawMetric = (metric, offset, fontSize, layout, padding = 10) => {
-  if (!metric) {
-    return
-  }
-  const { locale } = layout
-  const value = metric.getDisplayValue({
-    locale /*, TODO unit */
-  })
-  const { x, y, height: textH } = drawCenteredString(
-    value,
-    layout,
-    fontSize,
-    offset
-  )
-  if (metric.icon) {
-    const { height: iconH, width: iconW } = metric.icon
-    g.drawImage(metric.icon, x - iconW - padding, y + (textH - iconH) / 2)
-  }
-}
+import { initLayout } from './common'
+import { drawCenteredString } from '../utils/graphics'
 
 /**
  * This layout stacks 3 slots vertically, the first 2 being quite big.
+ * @fires [3FieldsLayout#pause]
+ * @fires [3FieldsLayout#new-lap]
  */
-module.exports = class Layout3Fields extends BaseLayout {
-  constructor(args = {}) {
-    super({ ...args, slotNb: 3, name: '3-fields' })
+export default function buildLayout(metrics) {
+  const width = g.getWidth()
+  const height = g.getHeight()
+  const padding = 20
+  const bigFont = height * 0.2
+  const smallFont = height * 0.1
+
+  function drawMetric(metric, offset, fontSize) {
+    if (!metric) {
+      return
+    }
+    const { x, y, textH } = drawCenteredString(
+      metric.value,
+      { width, height },
+      fontSize,
+      offset
+    )
+    if (metric.drawIcon) {
+      metric.drawIcon(
+        x - padding * 1.5,
+        y + textH / 2,
+        fontSize === bigFont ? 1 : 0.7
+      )
+    }
   }
 
-  /**
-   * Handles changed from displayed metrics, redrawing the entire layout
-   * @param {object} data - event data:
-   * @param {Metric} data.metric - changed metric
-   * @param {any} data.oldValue - previous value
-   */
-  onChangedMetric() {
-    const { height } = this
-    const bigFont = height * 0.2
-    const smallFont = height * 0.1
-    g.clear()
-    drawMetric(this.metrics[0], height * 0.2, bigFont, this)
-    drawMetric(this.metrics[1], height * 0.5, bigFont, this)
-    drawMetric(this.metrics[2], height * 0.8, smallFont, this)
-    g.flip()
-  }
+  const layout = initLayout(
+    {
+      draw() {
+        g.clear()
+        drawMetric(metrics[0], height * 0.2, bigFont)
+        drawMetric(metrics[1], height * 0.5, bigFont)
+        drawMetric(metrics[2], height * 0.8, smallFont)
+        g.flip()
+      }
+    },
+    metrics,
+    function({ button }) {
+      if (button === BTN1) {
+        layout.emit('pause')
+        layout.dispose()
+      } else if (button === BTN2) {
+        layout.emit('next')
+        layout.dispose()
+      } else if (button === BTN3) {
+        layout.emit('new-lap')
+      }
+    }
+  )
+  return layout
 }

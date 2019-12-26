@@ -1,40 +1,34 @@
-const BaseService = require('./base-service')
+let watches = []
 
 /**
  * Monitors button pushes
+ * @fires ButtonsService#press when button 1, 2 or 3 is pressed
  */
-class ButtonsService extends BaseService {
-  constructor() {
-    super({ name: 'buttons' })
-  }
-
+const buttons = {
   /**
-   * Starts monitoring button press (rising edge) for physical buttons
-   * @returns {ButtonsService} for chaining purposes
-   * @fires ButtonsService#press on button pushes
+   * Starts monitoring button press
+   * @fires ClockService#change every 100 milliseconds
    */
   start() {
-    this.watches = [BTN1, BTN2, BTN3].map(button =>
+    watches = [BTN1, BTN2, BTN3].map(function(button) {
       setWatch(
-        () => {
-          this.emit('press', { button })
+        function() {
+          buttons.emit('press', { button })
         },
         button,
         { repeat: true, edge: 'rising' }
       )
-    )
-    return this
-  }
+    })
+  },
 
   /**
-   * Stops buttons monitoring
-   * @returns {ButtonsService} for chaining purposes
+   * Stops monitoring button press
    */
-  dispose() {
-    this.watches.forEach(clearWatch)
-    return super.dispose()
+  stop() {
+    watches.forEach(clearWatch)
+    watches = []
+    buttons.removeAllListeners()
   }
 }
 
-// exposes a singleton
-module.exports = new ButtonsService()
+export default buttons

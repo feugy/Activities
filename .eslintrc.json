@@ -15,6 +15,7 @@
     "BTN4": true,
     "BTN5": true,
     "setWatch": true,
-    "clearWatch": true
+    "clearWatch": true,
+    "reset": true
   }
 }
