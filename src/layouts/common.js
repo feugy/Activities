@@ -9,28 +9,51 @@ import buttonsService from '../services/buttons'
  * - performs first draw
  * @param {object} layout - initialized layout
  * @param {array<object>} metrics - array of displayed metrics
- * @param {function} handleButtonPressed - handler for pressed buttons
+ * @param {function} onButtonPressed - handler for pressed buttons
  * @param {function} [handleDispose = null] - custom dispoal
  * @returns {object} enriched layout, for chaining purposes
  */
 export function initLayout(
   layout,
   metrics,
-  handleButtonPressed,
-  handleDispose
+  onButtonPressed = null,
+  onDispose = null
 ) {
+  const handleButton = onButtonPressed || makeHandleButtons(layout)
   // on dispose, release button handler and unregister metrics
   layout.dispose = function() {
-    handleDispose && handleDispose()
-    buttonsService.removeListener('press', handleButtonPressed)
+    onDispose && onDispose()
+    buttonsService.removeListener('press', handleButton)
     unregister(bindings)
   }
 
   // register metrics and bind button handler
   const bindings = register(metrics, layout)
-  buttonsService.on('press', handleButtonPressed)
+  buttonsService.on('press', handleButton)
 
   // first draw
   layout.draw()
   return layout
+}
+
+/**
+ * Generates a button handler for a given layout:
+ * - 'pause' on button 1 (disposes the layout)
+ * - 'next' on button 2 (diposes the layout)
+ * - 'new-lap' on button 3
+ * @param {object} layout - layout used
+ * @returns {function} button handler
+ */
+export function makeHandleButtons(layout) {
+  return ({ button }) => {
+    if (button === BTN1) {
+      layout.emit('pause')
+      layout.dispose()
+    } else if (button === BTN2) {
+      layout.emit('next')
+      layout.dispose()
+    } else if (button === BTN3) {
+      layout.emit('new-lap')
+    }
+  }
 }

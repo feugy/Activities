@@ -17,16 +17,17 @@ export default function buildLayout(metrics) {
     if (!metric) {
       return
     }
-    const { x, y, textH } = drawCenteredString(
+    const { x, y } = drawCenteredString(
       metric.value,
-      { width, height },
       fontSize,
+      width,
+      height,
       offset
     )
     if (metric.drawIcon) {
       metric.drawIcon(
         x - padding * 1.5,
-        y + textH / 2,
+        y + fontSize / 2,
         fontSize === bigFont ? 1 : 0.7
       )
     }
@@ -42,18 +43,7 @@ export default function buildLayout(metrics) {
         g.flip()
       }
     },
-    metrics,
-    function({ button }) {
-      if (button === BTN1) {
-        layout.emit('pause')
-        layout.dispose()
-      } else if (button === BTN2) {
-        layout.emit('next')
-        layout.dispose()
-      } else if (button === BTN3) {
-        layout.emit('new-lap')
-      }
-    }
+    metrics
   )
   return layout
 }

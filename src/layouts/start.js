@@ -45,12 +45,13 @@ export default function buildLayout() {
           true
         )
         g.setColor(color)
-        drawCenteredString(startText, { width, height }, fontSize)
+        drawCenteredString(startText, fontSize, width, height)
         fontSize = height * 0.1
         drawCenteredString(
           metric.value,
-          { width, height },
           fontSize,
+          width,
+          height,
           fontSize * 0.5
         )
         g.flip()

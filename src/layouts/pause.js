@@ -27,14 +27,16 @@ export default function buildLayout() {
         // draw message and metric
         drawCenteredString(
           pausedText,
-          { width, height },
           height * 0.1,
+          width,
+          height,
           height * 0.25
         )
         const { x, y } = drawCenteredString(
           metrics[currentSlot].value,
-          { width, height },
-          fontSize
+          fontSize,
+          width,
+          height
         )
         if (metrics[currentSlot].drawIcon) {
           metrics[currentSlot].drawIcon(x - 25, y + fontSize * 0.5)
