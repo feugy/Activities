@@ -1,6 +1,6 @@
 import { distance } from '../utils/gps'
-import { save } from '../utils/track'
 import { now } from '../utils/time'
+import saveService from './save'
 
 // count how many measures to compute averages
 let count = 0
@@ -29,7 +29,7 @@ function handlePosition({ speed, alt, fix, lat, lon, course }) {
       position.value.dec -= altDiff
     }
     position.emit('change')
-    save({ speed, alt, lat, lon, time: now() })
+    saveService.write({ speed, alt, lat, lon, time: now() })
   }
 }
 

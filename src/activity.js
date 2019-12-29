@@ -16,12 +16,13 @@ import buttonsService from './services/buttons'
 import lapsService from './services/laps'
 import heartRateService from './services/heart-rate'
 import positionService from './services/position'
+import saveService from './services/save'
 
 // console.log('> initial', process.memory().free)
 
 Bangle.setLCDMode('doublebuffered')
 
-const allServices = [clockService, buttonsService, positionService]
+const allServices = [clockService, buttonsService, positionService, saveService]
 
 function displayProgressLayout() {
   const lapDuration = buildDurationMetric(lapsService.value[0], 'curr', false)

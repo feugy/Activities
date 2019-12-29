@@ -1,4 +1,5 @@
 import { now } from '../utils/time'
+import saveService from './save'
 
 // count how many measures to compute averages
 let count = 0
@@ -11,6 +12,7 @@ function handleHeartBeat({ bpm, confidence }) {
     }
     count++
     heartRate.emit('change')
+    saveService.write({ bpm, confidence, time: now() })
   }
 }
 

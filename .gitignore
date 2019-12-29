@@ -2,6 +2,7 @@ coverage/**
 dist/**
 images/**
 node_modules/**
+runs/**
 package-lock.json
 yarn.lock
 *.old
