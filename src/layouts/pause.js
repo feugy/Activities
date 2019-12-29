@@ -33,19 +33,19 @@ export default function buildLayout() {
           height * 0.25
         )
         const { x, y } = drawCenteredString(
-          metrics[currentSlot].value,
+          metrics[currentSlot].curr(),
           fontSize,
           width,
           height
         )
-        if (metrics[currentSlot].drawIcon) {
-          metrics[currentSlot].drawIcon(x - 25, y + fontSize * 0.5)
+        if (metrics[currentSlot].icon) {
+          metrics[currentSlot].icon(x - 25, y + fontSize * 0.5)
         }
         // draw icons
         const color = g.getColor()
-        g.setColor(...red)
+        g.setColor.apply(g, red)
         g.drawRect(width * 0.9, height * 0.915, width * 0.95, height * 0.99)
-        g.setColor(...green)
+        g.setColor.apply(g, green)
         g.drawPoly(
           [
             width * 0.9,

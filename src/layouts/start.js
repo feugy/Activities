@@ -1,7 +1,8 @@
 import { initLayout } from './common'
-import { green } from '../utils/colors'
+import { green, white } from '../utils/colors'
 import { drawCenteredString } from '../utils/graphics'
 import buildTimeMetric from '../metrics/time'
+import positionService from '../services/position'
 
 const startText = 'Start'
 
@@ -19,8 +20,7 @@ export default function buildLayout() {
       draw() {
         g.clear()
         let fontSize = height * 0.2
-        const color = g.getColor()
-        g.setColor(...green)
+        g.setColor.apply(g, green)
         const radius = height * 0.17
         // draw rounded border around text
         const rectLeft = width * 0.32
@@ -44,16 +44,24 @@ export default function buildLayout() {
           ],
           true
         )
-        g.setColor(color)
+        g.setColor.apply(g, white)
         drawCenteredString(startText, fontSize, width, height)
+        // draw metric at the top
         fontSize = height * 0.1
         drawCenteredString(
-          metric.value,
+          metric.curr(),
           fontSize,
           width,
           height,
           fontSize * 0.5
         )
+        // draw satelite fix at the bottom
+        const color = positionService.value.hasFix ? green : white
+        g.setColor.apply(g, color)
+        g.drawCircle(width * 0.5, height * 0.85, 10)
+        if (positionService.value.hasFix) {
+          g.fillCircle(width * 0.5, height * 0.85, 7)
+        }
         g.flip()
       }
     },

@@ -5,6 +5,9 @@
   "extends": [
     "prettier-standard"
   ],
+  "rules": {
+    "eqeqeq": 0
+  },
   "globals": {
     "Bangle": true,
     "E": true,

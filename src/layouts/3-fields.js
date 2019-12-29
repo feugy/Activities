@@ -3,8 +3,6 @@ import { drawCenteredString } from '../utils/graphics'
 
 /**
  * This layout stacks 3 slots vertically, the first 2 being quite big.
- * @fires [3FieldsLayout#pause]
- * @fires [3FieldsLayout#new-lap]
  */
 export default function buildLayout(metrics) {
   const width = g.getWidth()
@@ -18,14 +16,14 @@ export default function buildLayout(metrics) {
       return
     }
     const { x, y } = drawCenteredString(
-      metric.value,
+      metric.val(),
       fontSize,
       width,
       height,
       offset
     )
-    if (metric.drawIcon) {
-      metric.drawIcon(
+    if (metric.icon) {
+      metric.icon(
         x - padding * 1.5,
         y + fontSize / 2,
         fontSize === bigFont ? 1 : 0.7

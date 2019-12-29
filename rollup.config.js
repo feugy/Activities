@@ -4,18 +4,23 @@ const { terser } = require('rollup-plugin-terser')
 const tc = require('turbocolor')
 const info = require('./package.json')
 
+// observed limit above which the app can not be loaded in Bangle's RAM
+const limit = 10000
+
 const buildTerserOption = (minify = true) => ({
   ecma: 6,
   // https://github.com/terser/terser#compress-options
   compress: {
     defaults: !minify,
-    ecma: 5
+    ecma: 5,
+    booleans_as_integers: true
   },
   // https://github.com/terser/terser#output-options
   output: {
     beautify: !minify,
     quote_style: 0,
-    ecma: 5
+    ecma: 5,
+    comments: false
   },
   // https://github.com/terser/terser#mangle-properties-options
   mangle: minify && {
@@ -30,6 +35,13 @@ const saveAsApp = (enabled = true) => ({
     console.error(
       tc.yellow(`minified code is ${tc.bold(code.length)} characters long`)
     )
+    if (code.length >= limit) {
+      console.error(
+        tc.red.bold(
+          `\u0007\nProduced code is more than ${limit} characters, and is unlikely to fit in Bangle.js RAM\n\u0007`
+        )
+      )
+    }
     if (!enabled) {
       return code
     }
@@ -51,7 +63,8 @@ ${chunks
   .join('\n')}
 const appDesc = "+${name}";
 storage.erase(appDesc);
-storage.write(appDesc, { "name": "${info.name}", "src": appSrc });`
+storage.write(appDesc, { "name": "${info.name}", "src": appSrc });
+eval(storage.read(appSrc));`
   }
 })
 

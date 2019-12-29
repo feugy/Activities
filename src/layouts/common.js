@@ -13,12 +13,7 @@ import buttonsService from '../services/buttons'
  * @param {function} [handleDispose = null] - custom dispoal
  * @returns {object} enriched layout, for chaining purposes
  */
-export function initLayout(
-  layout,
-  metrics,
-  onButtonPressed = null,
-  onDispose = null
-) {
+export function initLayout(layout, metrics, onButtonPressed, onDispose) {
   const handleButton = onButtonPressed || makeHandleButtons(layout)
   // on dispose, release button handler and unregister metrics
   layout.dispose = function() {

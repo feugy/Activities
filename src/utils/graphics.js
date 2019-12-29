@@ -7,7 +7,8 @@ import { white } from './colors'
  * @param {number} textH - size of the vector font used
  * @param {number} width - display width
  * @param {number} height - display height
- * @param {number} [verticalOffset = null] - y coordinate of the point used for vertical centering, default to half the layout height.
+ * @param {number} verticalOffset - y coordinate of the point used for vertical centering, default to half the layout height.
+ * @param {number} verticalOffset - y coordinate of the point used for horizontal centering, default to half the layout width.
  * @returns {object} drawn text metrics: { x, y, textW, textH }
  */
 export function drawCenteredString(
@@ -15,14 +16,16 @@ export function drawCenteredString(
   textH,
   width,
   height,
-  verticalOffset = null
+  verticalOffset,
+  horizontalOffset
 ) {
-  const offset = verticalOffset === null ? height * 0.5 : verticalOffset
+  const vOffset = verticalOffset || height * 0.5
+  const hOffset = horizontalOffset || width * 0.5
   g.setFontVector(textH)
   const textW = g.stringWidth(text)
-  const x = (width - textW) * 0.5
-  const y = offset - textH * 0.55
-  g.setColor(...white)
+  const x = hOffset - textW * 0.5
+  const y = vOffset - textH * 0.55
+  g.setColor.apply(g, white)
   g.drawString(text, x, y)
   return { x, y, textW, textH }
 }
@@ -34,12 +37,13 @@ export function drawCenteredString(
  * @param {number} textH - size of the vector font used
  * @param {number} x - abscissa of the top-right corner of the first character
  * @param {number} y - ordinate of the top-right corner of the first character
+ * @param {boolean} [rightAlign = false] - true to consider x/y as top-left corner of the last character
  * @returns {object} drawn text metrics: { textW, textH }
  */
-export function drawString(text, textH, x = 0, y = 0) {
+export function drawString(text, textH, x, y, rightAlign) {
   g.setFontVector(textH)
   const textW = g.stringWidth(text)
-  g.setColor(...white)
-  g.drawString(text, x, y)
+  g.setColor.apply(g, white)
+  g.drawString(text, (x || 0) - (rightAlign ? textW : 0), y || 0)
   return { textW, textH }
 }

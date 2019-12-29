@@ -1,55 +1,50 @@
-import timeTrackerService from '../services/time-tracker'
+import { initMetric } from './common'
+import lapsService from '../services/laps'
 import { black, white } from '../utils/colors'
 
 /**
- * Displays current lap
+ * Displays total lap count
  */
-export default function buildMetric(withIcon = true) {
-  const metric = {
-    /**
-     * Services this metric depends on
-     * @type {array<Service>}
-     */
-    deps: [timeTrackerService],
+export default function buildMetric(...params) {
+  return initMetric(
+    {
+      /**
+       * Services this metric depends on
+       * @type {array<Service>}
+       */
+      deps: [lapsService],
 
-    /**
-     * Current displayed value
-     * @type {number}
-     */
-    value: timeTrackerService.value.laps.length,
+      /**
+       * @returns number of laps
+       */
+      curr() {
+        return lapsService.value.length
+      },
 
-    /**
-     * Invoke to refresh value when one of the dependency has changed
-     */
-    refresh() {
-      metric.value = timeTrackerService.value.laps.length
+      /**
+       * Draws a rounded arrow
+       * @param {number} x - abscissa of the icon center
+       * @param {number} y - ordinate of the icon center
+       * @param {number} s - scale used
+       */
+      icon(x, y, s) {
+        s = s == null ? 1 : s
+        // white disk to shape the outer border of the arrow
+        g.setColor.apply(g, white)
+        g.fillCircle(x, y, 15 * s)
+        // clear smaller disk to shape the inner border of the arrow
+        g.setColor.apply(g, black)
+        g.fillCircle(x, y, 12 * s)
+        // clear a triangle to limit arrow beginning and end
+        g.fillPoly([x, y, x + 15 * s, y, x + 11 * s, y - 10 * s], true)
+        // draws the arrow triangle
+        g.setColor.apply(g, white)
+        g.fillPoly(
+          [x + 6 * s, y - 6 * s, x + 13 * s, y - 6 * s, x + 13 * s, y - 13 * s],
+          true
+        )
+      }
     },
-
-    /**
-     * Draws a rounded arrow
-     * @param {number} x - abscissa of the icon center
-     * @param {number} y - ordinate of the icon center
-     * @param {number} s - scale used
-     */
-    drawIcon(x, y, s = 1) {
-      // white disk to shape the outer border of the arrow
-      g.setColor(...white)
-      g.fillCircle(x, y, 15 * s)
-      // clear smaller disk to shape the inner border of the arrow
-      g.setColor(...black)
-      g.fillCircle(x, y, 12 * s)
-      // clear a triangle to limit arrow beginning and end
-      g.fillPoly([x, y, x + 15 * s, y, x + 11 * s, y - 10 * s], true)
-      // draws the arrow triangle
-      g.setColor(...white)
-      g.fillPoly(
-        [x + 6 * s, y - 6 * s, x + 13 * s, y - 6 * s, x + 13 * s, y - 13 * s],
-        true
-      )
-    }
-  }
-  if (!withIcon) {
-    delete metric.drawIcon
-  }
-  return metric
+    ...params
+  )
 }

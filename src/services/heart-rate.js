@@ -1,22 +1,32 @@
 import { now } from '../utils/time'
 
+// count how many measures to compute averages
+let count = 0
+
 function handleHeartBeat({ bpm, confidence }) {
   if (confidence >= 33) {
-    heartRate.value = { t: now(), bpm }
+    heartRate.value = {
+      last: { t: now(), bpm },
+      avg: (heartRate.value.avg * count + bpm) / (count + 1)
+    }
+    count++
     heartRate.emit('change')
   }
 }
 
 /**
  * Tracks heart rate over time, to compute average and get latest value.
- * It stores an array of measures, each with a timestamp and a value
+ * last bpm is stored with its timestamp, and average is computed since last reset
  */
 const heartRate = {
   /**
-   * Latest heart beat per minute
+   * Last and average heart beat per minute.
    * @type {object>} heart rate measure with timestamp (t) and value (bpm)
    */
-  value: {},
+  value: {
+    last: null,
+    avg: null
+  },
 
   /**
    * Starts monitoring heart rate
@@ -37,10 +47,11 @@ const heartRate = {
   },
 
   /**
-   * @returns {number} latest known BPM or null
+   * Reset average (typically on new lap)
    */
-  getLatestBPM() {
-    return heartRate.value.bpm
+  reset() {
+    heartRate.value.avg = null
+    heartRate.value._c = 0
   }
 }
 

@@ -10,15 +10,12 @@ export function register(metrics, layout) {
         binding = {
           service,
           listener() {
-            binding.metrics.forEach(metric => metric.refresh())
             layout.draw()
-          },
-          metrics: []
+          }
         }
         service.on('change', binding.listener)
         bindings.push(binding)
       }
-      binding.metrics.push(metric)
     })
   })
   return bindings
