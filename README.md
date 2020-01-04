@@ -32,7 +32,6 @@
 
 ## Features
 - load layouts from distinct files
-- cap refresh to 10 FPS
 - limit GPS rate to 1 per sec
 - display units and average
 

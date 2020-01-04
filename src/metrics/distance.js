@@ -9,12 +9,6 @@ export default function buildMetric(...params) {
   return initMetric(
     {
       /**
-       * Services this metric depends on
-       * @type {array<Service>}
-       */
-      deps: [positionService],
-
-      /**
        * @returns current distance in meters
        */
       curr() {

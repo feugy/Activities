@@ -7,7 +7,6 @@ let watches = []
 const buttons = {
   /**
    * Starts monitoring button press
-   * @fires ClockService#change every 100 milliseconds
    */
   start() {
     watches = [BTN1, BTN2, BTN3].map(function(button) {

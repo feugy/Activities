@@ -68,7 +68,6 @@ export default function buildLayout() {
         layout.dispose()
       } else if (button === BTN2) {
         currentSlot = (currentSlot + 1) % metrics.length
-        layout.draw()
       } else if (button === BTN1) {
         layout.emit('resume')
         layout.dispose()

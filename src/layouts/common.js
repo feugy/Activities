@@ -1,5 +1,5 @@
-import { register, unregister } from '../utils/events'
 import buttonsService from '../services/buttons'
+import clockService from '../services/clock'
 
 /**
  * Performs common layout initialization:
@@ -17,14 +17,15 @@ export function initLayout(layout, metrics, onButtonPressed, onDispose) {
   const handleButton = onButtonPressed || makeHandleButtons(layout)
   // on dispose, release button handler and unregister metrics
   layout.dispose = function() {
-    onDispose && onDispose()
     buttonsService.removeListener('press', handleButton)
-    unregister(bindings)
+    clockService.removeListener('tick', layout.draw)
+    layout.removeAllListeners()
+    onDispose && onDispose()
   }
 
-  // register metrics and bind button handler
-  const bindings = register(metrics, layout)
+  // register button and clock handlers
   buttonsService.on('press', handleButton)
+  clockService.on('tick', layout.draw)
 
   // first draw
   layout.draw()

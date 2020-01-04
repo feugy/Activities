@@ -1,6 +1,4 @@
 import { distance } from '../utils/gps'
-import { now } from '../utils/time'
-import saveService from './save'
 
 // count how many measures to compute averages
 let count = 0
@@ -19,7 +17,9 @@ function handlePosition({ speed, alt, fix, lat, lon, course }) {
       course,
       avgSpeed: (avgSpeed * count + speed) / (count + 1),
       avgAlt: (avgAlt * count + alt) / (count + 1),
-      dist: dist + distance(position.value, { lat, lon, alt })
+      dist:
+        dist +
+        (position.value.lat ? distance(position.value, { lat, lon, alt }) : 0)
     })
     count++
     const altDiff = position.value.alt == null ? null : alt - position.value.alt
@@ -28,8 +28,6 @@ function handlePosition({ speed, alt, fix, lat, lon, course }) {
     } else if (altDiff < 0) {
       position.value.dec -= altDiff
     }
-    position.emit('change')
-    saveService.write({ speed, alt, lat, lon, time: now() })
   }
 }
 
@@ -78,7 +76,6 @@ const position = {
   stop() {
     Bangle.removeListener('GPS', handlePosition)
     Bangle.setGPSPower(false)
-    this.removeAllListeners()
   },
 
   /**

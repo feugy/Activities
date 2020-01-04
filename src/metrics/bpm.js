@@ -9,12 +9,6 @@ export default function buildMetric(...params) {
   return initMetric(
     {
       /**
-       * Services this metric depends on
-       * @type {array<Service>}
-       */
-      deps: [heartRateService],
-
-      /**
        * @returns current heart beats per minutes
        */
       curr() {

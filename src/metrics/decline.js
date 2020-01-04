@@ -1,6 +1,5 @@
 import { initMetric } from './common'
 import positionService from '../services/position'
-import { white } from '../utils/colors'
 
 /**
  * Displays decline
@@ -8,12 +7,6 @@ import { white } from '../utils/colors'
 export default function buildMetric(...params) {
   return initMetric(
     {
-      /**
-       * Services this metric depends on
-       * @type {array<Service>}
-       */
-      deps: [positionService],
-
       /**
        * @returns total decline in meters
        */

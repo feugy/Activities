@@ -26,12 +26,6 @@ export default function buildMetric(lap, ...params) {
       lap,
 
       /**
-       * Services this metric depends on
-       * @type {array<Service>}
-       */
-      deps: [clockService],
-
-      /**
        * Compute lap duration, using either provided lap or metric lap.
        * @param {object} lapParam - lap for which duration is computed, with:
        * @param {number} lapParam.start - start timestamp

@@ -9,12 +9,6 @@ export default function buildMetric(...params) {
   return initMetric(
     {
       /**
-       * Services this metric depends on
-       * @type {array<Service>}
-       */
-      deps: [clockService],
-
-      /**
        * @returns current time with hours, minutes and seconds
        */
       curr() {

@@ -28,7 +28,6 @@ const laps = {
    */
   start() {
     laps.value[0].start = time.now()
-    laps.emit('change')
   },
 
   /**
@@ -37,7 +36,6 @@ const laps = {
   pause() {
     laps.value[0].pauses.unshift({ start: time.now() })
     positionService.pause()
-    laps.emit('change')
   },
 
   /**
@@ -46,7 +44,6 @@ const laps = {
   resume() {
     laps.value[0].pauses[0].stop = time.now()
     positionService.resume()
-    laps.emit('change')
   },
 
   /**
@@ -54,8 +51,6 @@ const laps = {
    */
   stop() {
     laps.value[0].stop = time.now()
-    laps.emit('change')
-    this.removeAllListeners()
   },
 
   /**
@@ -74,7 +69,6 @@ const laps = {
     // reset average from other services
     positionService.reset()
     heartRateService.reset()
-    laps.emit('change')
   }
 }
 

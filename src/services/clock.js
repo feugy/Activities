@@ -2,13 +2,14 @@ import { now } from '../utils/time'
 
 function handleTick() {
   clock.value = now()
-  clock.emit('change')
+  clock.emit('tick')
 }
 
 let interval
 
 /**
  * Monitors current date and time, refreshing every 100 ms
+ * @fires ClockService#tick every 100 milliseconds
  */
 const clock = {
   /**
@@ -19,7 +20,6 @@ const clock = {
 
   /**
    * Starts time monitoring
-   * @fires ClockService#change every 100 milliseconds
    */
   start() {
     handleTick()

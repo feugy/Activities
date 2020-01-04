@@ -1,5 +1,4 @@
 import { now } from '../utils/time'
-import saveService from './save'
 
 // count how many measures to compute averages
 let count = 0
@@ -11,8 +10,6 @@ function handleHeartBeat({ bpm, confidence }) {
       avg: (heartRate.value.avg * count + bpm) / (count + 1)
     }
     count++
-    heartRate.emit('change')
-    saveService.write({ bpm, confidence, time: now() })
   }
 }
 
@@ -45,7 +42,6 @@ const heartRate = {
   stop() {
     Bangle.removeListener('HRM', handleHeartBeat)
     Bangle.setHRMPower(false)
-    this.removeAllListeners()
   },
 
   /**
@@ -53,7 +49,7 @@ const heartRate = {
    */
   reset() {
     heartRate.value.avg = null
-    heartRate.value._c = 0
+    count = 0
   }
 }
 
