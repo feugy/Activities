@@ -3,7 +3,7 @@ import buildTimeMetric from '../metrics/time'
 import buildAltitudeMetric from '../metrics/altitude'
 import buildBPMMetric from '../metrics/bpm'
 
-export default function buildInstantLayout() {
+export function build() {
   return build3FieldsLayout([
     buildBPMMetric(),
     buildAltitudeMetric(),

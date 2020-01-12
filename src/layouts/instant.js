@@ -3,7 +3,7 @@ import buildDurationMetric from '../metrics/duration'
 import buildDistanceMetric from '../metrics/distance'
 import buildSpeedMetric from '../metrics/speed'
 
-export default function buildInstantLayout() {
+export function build() {
   return build3ColumnsLayout([
     buildDurationMetric(),
     buildDistanceMetric(),

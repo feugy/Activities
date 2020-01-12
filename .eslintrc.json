@@ -10,15 +10,16 @@
   },
   "globals": {
     "Bangle": true,
-    "E": true,
-    "g": true,
     "BTN1": true,
     "BTN2": true,
     "BTN3": true,
     "BTN4": true,
     "BTN5": true,
-    "setWatch": true,
     "clearWatch": true,
-    "reset": true
+    "E": true,
+    "g": true,
+    "Modules": true,
+    "reset": true,
+    "setWatch": true
   }
 }

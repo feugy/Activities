@@ -1,4 +1,4 @@
-import * as time from '../utils/time'
+import { now } from '../utils/time'
 import positionService from './position'
 import heartRateService from './heart-rate'
 
@@ -27,14 +27,14 @@ const laps = {
    * Starts lap tracking and first lap
    */
   start() {
-    laps.value[0].start = time.now()
+    laps.value[0].start = now()
   },
 
   /**
    * Pauses current lap
    */
   pause() {
-    laps.value[0].pauses.unshift({ start: time.now() })
+    laps.value[0].pauses.unshift({ start: now() })
     positionService.pause()
   },
 
@@ -42,7 +42,7 @@ const laps = {
    * Resumes current lap
    */
   resume() {
-    laps.value[0].pauses[0].stop = time.now()
+    laps.value[0].pauses[0].stop = now()
     positionService.resume()
   },
 
@@ -50,22 +50,22 @@ const laps = {
    * Stops lap tracking and current lap
    */
   stop() {
-    laps.value[0].stop = time.now()
+    laps.value[0].stop = now()
   },
 
   /**
    * Stops current lap and starts a new one
    */
   newLap() {
-    const now = time.now()
+    const time = now()
     Object.assign(laps.value[0], {
-      stop: now,
+      stop: time,
       // store averages for lap display
       bpm: heartRateService.value.avg,
       speed: positionService.value.avgSpeed,
       alt: positionService.value.avgAlt
     })
-    laps.value.unshift({ start: now, stop: null, pauses: [] })
+    laps.value.unshift({ start: time, stop: null, pauses: [] })
     // reset average from other services
     positionService.reset()
     heartRateService.reset()

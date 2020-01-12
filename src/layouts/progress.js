@@ -6,7 +6,7 @@ import buildDeclineMetric from '../metrics/decline'
 import buildSpeedMetric from '../metrics/speed'
 import lapsService from '../services/laps'
 
-export default function buildProgressLayout() {
+export function build() {
   const lapDuration = buildDurationMetric(lapsService.value[0], 'curr', false)
   const layout = build5FieldsLayout([
     buildSpeedMetric('avg'),
@@ -16,7 +16,9 @@ export default function buildProgressLayout() {
     lapDuration
   ])
   layout.on('new-lap', function() {
-    lapDuration.lap = lapsService.value[0]
+    setTimeout(() => {
+      lapDuration.lap = lapsService.value[0]
+    }, 0)
   })
   return layout
 }

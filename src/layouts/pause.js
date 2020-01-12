@@ -13,7 +13,7 @@ const pausedText = 'paused...'
  * @fires [PauseLayout#stop]
  * @fires [PauseLayout#resume]
  */
-export default function buildLayout() {
+export function build() {
   const width = g.getWidth()
   const height = g.getHeight()
   let currentSlot = 0
